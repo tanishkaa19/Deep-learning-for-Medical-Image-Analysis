@@ -197,17 +197,11 @@ class AttentionModel(nn.Module):
         context3, _ = self.additive_attention(global_context, x_for_additive, x_for_additive)
         # print(f"additive  Attention output shape: {context3.shape}")
         context3 = context3.unsqueeze(-1).unsqueeze(-1).expand(-1, -1, 7, 7)
-        # print(context1.shape, context2.shape, context3.shape)
-        # context3 = context3.unsqueeze(-1).unsqueeze(-1)  # Add spatial dimensions: [B, C, 1, 1]
-        # context3 = F.adaptive_avg_pool2d(context3, (H, W))
-        # self.dropout = nn.Dropout(0.4)
+       
         
         context1 = self.top_k_channel_selection(context1)
-        # context1 = self.dropout(context1)
         context2 = self.top_k_channel_selection(context2)
-        # context2 = self.dropout(context2)
         context3 = self.top_k_channel_selection(context3)
-        # context3 = self.dropout(context3)
 
         concatenated = torch.cat([context1, context2, context3], dim=1)
         b1,c1,h1,w1 = concatenated.size()
